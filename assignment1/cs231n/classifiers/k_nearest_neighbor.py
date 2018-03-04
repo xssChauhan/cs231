@@ -97,7 +97,9 @@ class KNearestNeighbor(object):
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
       #######################################################################
-      pass
+      dists[i,:] = np.linalg.norm(
+        self.X_train - X[i] , axis = 1
+      )
       #######################################################################
       #                         END OF YOUR CODE                            #
       #######################################################################
@@ -157,6 +159,11 @@ class KNearestNeighbor(object):
       # neighbors. Store these labels in closest_y.                           #
       # Hint: Look up the function numpy.argsort.                             #
       #########################################################################
+      closest_y = self.y_train[
+        np.argpartition(
+            dists[i] , range(k)
+        )[:k] 
+      ]
       pass
       #########################################################################
       # TODO:                                                                 #
@@ -165,6 +172,7 @@ class KNearestNeighbor(object):
       # Store this label in y_pred[i]. Break ties by choosing the smaller     #
       # label.                                                                #
       #########################################################################
+      y_pred[i] = np.bincount(closest_y).argmax()
       pass
       #########################################################################
       #                           END OF YOUR CODE                            # 

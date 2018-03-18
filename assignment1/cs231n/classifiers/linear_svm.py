@@ -79,9 +79,9 @@ def svm_loss_vectorized(W, X, y, reg):
   scores = np.dot(X,W)
   margins = scores - scores[y,:] + 1
   bool = margins > 0
-  loss = np.sum(margins*bool , axis=1) - 1
+  Loss = np.sum(margins*bool , axis=1) - 1
   regularization = 0.5*reg*np.sum(W*W)
-  loss = np.sum(loss)/X.shape[0] + regularization
+  loss = np.sum(Loss)/X.shape[0] + regularization
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -100,5 +100,8 @@ def svm_loss_vectorized(W, X, y, reg):
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
-
+  Bool = bool*np.ones(Loss.shape)
+  Bool[[y,np.arangenum_train]] = -(np.sum(Bool,axis=0-1))
+  dW = Bool.dot(X.T) / float(num_train)
+  dW += reg * W
   return loss, dW

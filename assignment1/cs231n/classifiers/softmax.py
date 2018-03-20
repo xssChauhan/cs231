@@ -27,9 +27,13 @@ def softmax_loss_naive(W, X, y, reg):
   dW = np.zeros_like(W)
   for e in range(num_train):
       scores = np.dot(W.T , X[e])
+      scores -= np.max(scores)
       exp = np.exp(scores)
-      exp -= np.max(exp)
       sums = np.sum(exp)
+      if sums == 0:
+          print(exp)
+          print(sums)
+          raise ValueError("Error Encountered")
       l = -np.log(
         exp[y[e]]/sums
       )

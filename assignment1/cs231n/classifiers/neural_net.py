@@ -70,7 +70,12 @@ class TwoLayerNet(object):
     N, D = X.shape
 
     # Compute the forward pass
-    scores = None
+    step_1 = np.dot(
+        X , W1 
+    ) + b1
+    scores = np.dot(
+        step_1 , W2
+    ) + b2
     #############################################################################
     # TODO: Perform the forward pass, computing the class scores for the input. #
     # Store the result in the scores variable, which should be an array of      #
@@ -87,6 +92,14 @@ class TwoLayerNet(object):
 
     # Compute the loss
     loss = None
+    scores -= np.max(scores , axis = 1)[:,None]
+    exp = np.exp(scores)
+    sums =  np.sum(exp , axis = 1)
+    log = np.log(sums)
+    _loss = log - scores[np.arange(N),y]
+    _loss = np.sum(_loss)/N
+    loss = _loss + 0.5 * reg * np.sum(W1*W1) +  0.5*reg*np.sum(W2*W2)
+    print(_loss)
     #############################################################################
     # TODO: Finish the forward pass, and compute the loss. This should include  #
     # both the data loss and L2 regularization for W1 and W2. Store the result  #
@@ -109,6 +122,8 @@ class TwoLayerNet(object):
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
+    grads['W1'] = np.zeros_like(W1)
+    grads['W2'] = np.zeros_like(W2)
 
     return loss, grads
 

@@ -73,6 +73,8 @@ class TwoLayerNet(object):
     step_1 = np.dot(
         X , W1 
     ) + b1
+    step_1 = np.maximum(0 , step_1)
+    print(step_1.shape)
     scores = np.dot(
         step_1 , W2
     ) + b2
@@ -113,6 +115,16 @@ class TwoLayerNet(object):
 
     # Backward pass: compute gradients
     grads = {}
+    delta_outer = exp/sums[:,None]
+    print("Delta",delta_outer.shape)
+    delta_outer[np.arange(N),y] -= 1
+    grads['W2'] = np.dot(
+        delta_outer , W2.T
+    )
+    grads['W1'] = np.dot(
+        grads['W2'] , W1.T
+    )
+
     #############################################################################
     # TODO: Compute the backward pass, computing the derivatives of the weights #
     # and biases. Store the results in the grads dictionary. For example,       #
@@ -122,8 +134,6 @@ class TwoLayerNet(object):
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
-    grads['W1'] = np.zeros_like(W1)
-    grads['W2'] = np.zeros_like(W2)
 
     return loss, grads
 
